@@ -58,6 +58,13 @@ class CalculatorModal extends React.Component {
 
   handleSubmit = async () => {
     const { length, width, height, weight, currentStep } = this.state;
+
+     // Check if the current field is empty
+    const currentField = [length, width, height, weight][currentStep - 1];
+    if (!currentField.trim()) {
+      alert('The value cannot be empty');
+      return;
+    }
   
     if (currentStep < 4) {
       this.nextStep();
