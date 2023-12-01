@@ -11,7 +11,7 @@ const productService = {
   getProduct: async (length, width, height, weight) => {
     try {
       const response = await api.get('/products/find_by_dimensions', {
-        params: { length, width, height, weight } 
+        dimension_params: { length, width, height, weight } 
       });
       return response.data;
     } catch (error) {

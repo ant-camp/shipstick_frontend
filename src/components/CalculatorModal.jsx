@@ -65,28 +65,35 @@ class CalculatorModal extends React.Component {
       try {
         const result = `Length: ${length}, Width: ${width}, Height: ${height}, Weight: ${weight}`;
         this.setState({ result });
-
+  
         // Call the API
         const response = await productService.getProduct(length, width, height, weight);
-
-        // Process the response
-        const apiResult = JSON.stringify(response.name);
-        console.log(response.name)
+  
+        // Check the response
+        let apiResult;
+        if (response.error) {
+          apiResult = response.error; 
+        } else {
+          apiResult = `Suggested Size Luggage: ${response.name}`;
+        }
+  
         this.setState({ apiResult });
-        
+  
         // Close the modal after 5 seconds
-         this.closeTimer = setTimeout(() => {
+        this.closeTimer = setTimeout(() => {
           if (this.props.onResults) {
-            this.props.onResults(`${apiResult}`);
+            this.props.onResults(apiResult);
           }
           this.props.onHide();
         }, 5000);
-
+  
       } catch (error) {
         console.error('Error fetching product:', error);
+        this.setState({ apiResult: 'Error fetching product' });
       }
     }
   }
+  
 
   render() {
     const { onHide } = this.props;
@@ -161,7 +168,7 @@ class CalculatorModal extends React.Component {
 
           {apiResult && (
             <div>
-              <h4>Suggested Size Luggage: {apiResult}</h4>
+              <h4>{apiResult}</h4>
             </div>
           )}
 
